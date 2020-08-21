@@ -82,10 +82,12 @@ CURRENT_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
 # ARMV7A_ARM_CORTEX_A7 : ARMv7A architecture with NEON-VFPv4 ISA (32 bit OS)
 # Code optimized for ARM Cortex A7.
 #
+# RISCV : Basic RISC-V 64-bit architecture
+#
 # GENERIC : generic architecture, plain C code.
 #
 #
-TARGET = X64_INTEL_HASWELL
+# TARGET = X64_INTEL_HASWELL
 # TARGET = X64_INTEL_SANDY_BRIDGE
 # TARGET = X64_INTEL_CORE
 #
@@ -98,6 +100,8 @@ TARGET = X64_INTEL_HASWELL
 # TARGET = ARMV7A_ARM_CORTEX_A15
 # TARGET = ARMV7A_ARM_CORTEX_A9
 # TARGET = ARMV7A_ARM_CORTEX_A7
+#
+TARGET = RISCV
 #
 # TARGET = GENERIC
 
@@ -232,14 +236,16 @@ PRINT_NAME = 0
 
 # C Compiler
 #
-CC ?= gcc
+# CC ?= gcc
 # CC = clang
 # CC = x86_64-w64-mingw32-gcc
 # CC = arm-linux-gnueabihf-gcc
+CC = riscv64-unknown-linux-gnu-gcc
 
 # archive routine
 #
-AR = ar
+# AR = ar
+AR = riscv64-unknown-linux-gnu-ar
 
 # Installation directory
 #
@@ -485,6 +491,11 @@ endif
 ifeq ($(TARGET), ARMV7A_ARM_CORTEX_A7)
 CFLAGS  += -marm -mfloat-abi=hard -mfpu=neon-vfpv4 -mcpu=cortex-a7 -DTARGET_ARMV7A_ARM_CORTEX_A7
 ASFLAGS += -mfpu=neon-vfpv4 -DTARGET_ARMV7A_ARM_CORTEX_A7
+endif
+ifeq ($(TARGET), RISCV)
+CFLAGS  += -march=rv64gc -static -DTARGET_RISCV
+ASFLAGS += -static -DTARGET_RISCV
+LDFLAGS += -static
 endif
 ifeq ($(TARGET), GENERIC)
 CFLAGS  += -DTARGET_GENERIC

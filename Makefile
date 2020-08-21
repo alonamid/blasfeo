@@ -180,7 +180,7 @@ AUX_HP_PM_OBJS = \
 		auxiliary/m_aux_lib48.o \
 
 endif
-ifeq ($(TARGET), $(filter $(TARGET), X64_INTEL_CORE X64_AMD_BULLDOZER X86_AMD_JAGUAR X86_AMD_BARCELONA ARMV8A_ARM_CORTEX_A57 ARMV8A_ARM_CORTEX_A53 ARMV7A_ARM_CORTEX_A15 ARMV7A_ARM_CORTEX_A9 ARMV7A_ARM_CORTEX_A7 GENERIC))
+ifeq ($(TARGET), $(filter $(TARGET), X64_INTEL_CORE X64_AMD_BULLDOZER X86_AMD_JAGUAR X86_AMD_BARCELONA ARMV8A_ARM_CORTEX_A57 ARMV8A_ARM_CORTEX_A53 ARMV7A_ARM_CORTEX_A15 ARMV7A_ARM_CORTEX_A9 ARMV7A_ARM_CORTEX_A7 RISCV GENERIC))
 
 ### BLASFEO HP, PANEL-MAJOR ###
 BLASFEO_HP_PM_OBJS = \
@@ -575,6 +575,36 @@ KERNEL_OBJS = \
 		kernel/kernel_align_generic.o \
 
 endif
+ifeq ($(TARGET), RISCV)
+
+### KERNELS ###
+KERNEL_OBJS = \
+		kernel/generic/kernel_dgemm_4x4_lib4.o \
+		kernel/generic/kernel_dgemm_diag_lib4.o \
+		kernel/generic/kernel_dgemv_4_lib4.o \
+		kernel/generic/kernel_dsymv_4_lib4.o \
+		kernel/generic/kernel_dgecp_lib4.o \
+		kernel/generic/kernel_dgetr_lib4.o \
+		kernel/generic/kernel_dgetrf_pivot_lib4.o \
+		kernel/generic/kernel_dgeqrf_4_lib4.o \
+		kernel/generic/kernel_dpack_lib4.o \
+		kernel/generic/kernel_ddot_lib.o \
+		kernel/generic/kernel_daxpy_lib.o \
+		\
+		kernel/generic/kernel_sgemm_4x4_lib4.o \
+		kernel/generic/kernel_sgemm_diag_lib4.o \
+		kernel/generic/kernel_sgemv_4_lib4.o \
+		kernel/generic/kernel_ssymv_4_lib4.o \
+		kernel/generic/kernel_sgetrf_pivot_lib4.o \
+		kernel/generic/kernel_sgecp_lib4.o \
+		kernel/generic/kernel_sgetr_lib4.o \
+		kernel/generic/kernel_spack_lib4.o \
+		kernel/generic/kernel_sdot_lib.o \
+		kernel/generic/kernel_saxpy_lib.o \
+		\
+		kernel/kernel_align_generic.o \
+
+endif
 ifeq ($(TARGET), GENERIC)
 
 ### KERNELS ###
@@ -761,6 +791,9 @@ OBJS += sandbox/kernel_armv7a.o
 endif
 ifeq ($(TARGET), ARMV7A_ARM_CORTEX_A9)
 OBJS += sandbox/kernel_armv7a.o
+endif
+ifeq ($(TARGET), RISCV)
+OBJS += sandbox/kernel_generic.o
 endif
 ifeq ($(TARGET), GENERIC)
 OBJS += sandbox/kernel_generic.o
@@ -949,6 +982,11 @@ ifeq ($(TARGET), ARMV7A_ARM_CORTEX_A9)
 	echo "#ifndef TARGET_NEED_FEATURE_NEON"    >> ./include/blasfeo_target.h
 	echo "#define TARGET_NEED_FEATURE_NEON"    >> ./include/blasfeo_target.h
 	echo "#endif"                              >> ./include/blasfeo_target.h
+endif
+ifeq ($(TARGET), RISCV)
+	echo "#ifndef TARGET_RISCV" >  ./include/blasfeo_target.h
+	echo "#define TARGET_RISCV" >> ./include/blasfeo_target.h
+	echo "#endif"                 >> ./include/blasfeo_target.h
 endif
 ifeq ($(TARGET), GENERIC)
 	echo "#ifndef TARGET_GENERIC" >  ./include/blasfeo_target.h

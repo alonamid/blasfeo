@@ -46,7 +46,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 
 # Target architecture
-set(TARGET X64_AUTOMATIC CACHE STRING "Target architecture")
+# set(TARGET X64_AUTOMATIC CACHE STRING "Target architecture")
 # set(TARGET X64_INTEL_HASWELL CACHE STRING "Target architecture")
 # set(TARGET X64_INTEL_SANDY_BRIDGE CACHE STRING "Target architecture")
 # set(TARGET X64_INTEL_CORE CACHE STRING "Target architecture")
@@ -56,6 +56,7 @@ set(TARGET X64_AUTOMATIC CACHE STRING "Target architecture")
 # set(TARGET ARMV7A_ARM_CORTEX_A15 CACHE STRING "Target architecture")
 # set(TARGET ARMV7A_ARM_CORTEX_A9 CACHE STRING "Target architecture")
 # set(TARGET ARMV7A_ARM_CORTEX_A7 CACHE STRING "Target architecture")
+set(TARGET RISCV CACHE STRING "Target architecture")
 # set(TARGET GENERIC CACHE STRING "Target architecture")
 
 # Select back-end linear lagebra version (LA) to implement BLASFEO API:
@@ -140,6 +141,7 @@ set(ALLOWED_TARGETS
 		ARMV7A_ARM_CORTEX_A15
 		ARMV7A_ARM_CORTEX_A9
 		ARMV7A_ARM_CORTEX_A7
+		RISCV
 		GENERIC
 		)
 set_property(CACHE TARGET PROPERTY STRINGS ${ALLOWED_TARGETS})
@@ -348,6 +350,7 @@ set(C_FLAGS_TARGET_ARMV8A_ARM_CORTEX_A53  "-march=armv8-a+crc+crypto+simd -mcpu=
 set(C_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A15  "-marm -mfloat-abi=hard -mfpu=neon-vfpv4 -mcpu=cortex-a15")
 set(C_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A9   "-marm -mfloat-abi=hard -mfpu=neon -mcpu=cortex-a9")
 set(C_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A7   "-marm -mfloat-abi=hard -mfpu=neon-vfpv4 -mcpu=cortex-a7")
+set(C_FLAGS_TARGET_RISCV                  "-march=rv64gc")
 set(C_FLAGS_TARGET_GENERIC                "")
 
 # architecture-specific assembly flags
@@ -360,6 +363,7 @@ set(ASM_FLAGS_TARGET_ARMV8A_ARM_CORTEX_A53  "")
 set(ASM_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A15  "-mfpu=neon-vfpv4 -mcpu=cortex-a15")
 set(ASM_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A9   "-mfpu=neon -mcpu=cortex-a9")
 set(ASM_FLAGS_TARGET_ARMV7A_ARM_CORTEX_A7   "-mfpu=neon-vfpv4 -mcpu=cortex-a7")
+set(ASM_FLAGS_TARGET_RISCV                  "")
 set(ASM_FLAGS_TARGET_GENERIC                "")
 
 
@@ -594,7 +598,7 @@ file(GLOB AUX_HP_PM_SRC
 	)
 
 endif()
-if(${TARGET} MATCHES X64_INTEL_CORE OR ${TARGET} MATCHES X64_AMD_BULLDOZER OR ${TARGET} MATCHES ARMV8A_ARM_CORTEX_A57 OR ${TARGET} MATCHES ARMV8A_ARM_CORTEX_A53 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A15 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A7 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A9 OR ${TARGET} MATCHES GENERIC)
+if(${TARGET} MATCHES X64_INTEL_CORE OR ${TARGET} MATCHES X64_AMD_BULLDOZER OR ${TARGET} MATCHES ARMV8A_ARM_CORTEX_A57 OR ${TARGET} MATCHES ARMV8A_ARM_CORTEX_A53 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A15 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A7 OR ${TARGET} MATCHES ARMV7A_ARM_CORTEX_A9 OR ${TARGET} MATCHES RISCV OR ${TARGET} MATCHES GENERIC)
 
 file(GLOB BLASFEO_HP_PM_SRC
 	${PROJECT_SOURCE_DIR}/blasfeo_hp_pm/d_blas1_lib4.c
@@ -952,6 +956,36 @@ file(GLOB KERNEL_SRC
 	)
 
 endif(${TARGET} MATCHES ARMV7A_ARM_CORTEX_A9)
+if(${TARGET} MATCHES RISCV)
+
+file(GLOB KERNEL_SRC
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgemm_4x4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgemm_diag_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgemv_4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dsymv_4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgecp_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgetr_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgetrf_pivot_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dgeqrf_4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_dpack_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_ddot_lib.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_daxpy_lib.c
+
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgemm_4x4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgemm_diag_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgemv_4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_ssymv_4_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgetrf_pivot_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgecp_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sgetr_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_spack_lib4.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_sdot_lib.c
+	${PROJECT_SOURCE_DIR}/kernel/generic/kernel_saxpy_lib.c
+
+	${PROJECT_SOURCE_DIR}/kernel/kernel_align_generic.c
+	)
+
+endif(${TARGET} MATCHES RISCV)
 if(${TARGET} MATCHES GENERIC)
 
 file(GLOB KERNEL_SRC

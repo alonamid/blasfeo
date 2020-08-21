@@ -125,6 +125,9 @@ openblas_set_num_threads(1);
 #elif defined(TARGET_ARMV7A_ARM_CORTEX_A9)
 	const float flops_max = 1;
 	printf("Testing BLAS version for VFPv3 instruction set, 32 bit (optimized for ARM Cortex A9): theoretical peak %5.1f Gflops\n", flops_max*GHz_max);
+#elif defined(TARGET_RISCV)
+	const float flops_max = 2;
+	printf("Testing BLAS version for RISCV instruction set, 64 bit: theoretical peak %5.1f Gflops\n", flops_max*GHz_max);
 #elif defined(TARGET_GENERIC)
 	const float flops_max = 2;
 	printf("Testing BLAS version for generic scalar instruction set: theoretical peak %5.1f Gflops ???\n", flops_max*GHz_max);

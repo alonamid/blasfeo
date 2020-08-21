@@ -43,7 +43,7 @@ endif
 ifeq ($(TARGET), $(filter $(TARGET), X86_AMD_JAGUAR X86_AMD_BARCELONA))
 OBJS += kernel_align_x86.o
 endif
-ifeq ($(TARGET), $(filter $(TARGET), ARMV8A_ARM_CORTEX_A57 ARMV8A_ARM_CORTEX_A53 ARMV7A_ARM_CORTEX_A15 ARMV7A_ARM_CORTEX_A9 ARMV7A_ARM_CORTEX_A7 GENERIC))
+ifeq ($(TARGET), $(filter $(TARGET), ARMV8A_ARM_CORTEX_A57 ARMV8A_ARM_CORTEX_A53 ARMV7A_ARM_CORTEX_A15 ARMV7A_ARM_CORTEX_A9 ARMV7A_ARM_CORTEX_A7 RISCV GENERIC))
 OBJS += kernel_align_generic.o
 endif
 
@@ -86,6 +86,10 @@ endif
 
 ifeq ($(TARGET), $(filter $(TARGET), ARMV7A_ARM_CORTEX_A15 ARMV7A_ARM_CORTEX_A9 ARMV7A_ARM_CORTEX_A7))
 	( cd armv7a; $(MAKE) obj)
+	( cd generic; $(MAKE) obj)
+endif
+
+ifeq ($(TARGET), RISCV)
 	( cd generic; $(MAKE) obj)
 endif
 
