@@ -45,6 +45,7 @@ LIBS += $(LIBS_EXTERNAL_BLAS)
 
 LIBS += -lm
 #LIBS += -fopenmp
+LIBS += $(LDFLAGS)
 
 #ifeq ($(EXTERNAL_BLAS), 0)
 #get_refblas:
@@ -75,8 +76,8 @@ endif
 endif
 
 # all benchmarks
-ONE_OBJS = benchmark_d_blasfeo_api.o
-#ONE_OBJS = benchmark_s_blasfeo_api.o
+#ONE_OBJS = benchmark_d_blasfeo_api.o
+ONE_OBJS = benchmark_s_blasfeo_api.o
 #ONE_OBJS = benchmark_d_blas_api.o
 #ONE_OBJS = benchmark_s_blas_api.o
 #ONE_OBJS = benchmark_bandwidth.o

@@ -136,7 +136,7 @@ openblas_set_num_threads(1);
 
 
 	FILE *f;
-	f = fopen("./build/benchmark_one.m", "w"); // a
+	f = fopen("./benchmark_one.m", "w"); // a
 
 //	fprintf(f, "A = [%f %f];\n", GHz_max, flops_max);
 //	fprintf(f, "\n");
@@ -157,9 +157,9 @@ openblas_set_num_threads(1);
 //	for(ll=0; ll<2; ll++) // up to 8
 //	for(ll=0; ll<3; ll++) // up to 12
 //	for(ll=0; ll<4; ll++) // up to 16
-//	for(ll=0; ll<24; ll++)
+	for(ll=0; ll<24; ll++)
 //	for(ll=0; ll<63; ll++) // up to 256
-	for(ll=0; ll<75; ll++) // up to 300
+//	for(ll=0; ll<75; ll++) // up to 300
 //	for(ll=0; ll<115; ll++) // up to 460
 //	for(ll=0; ll<120; ll++) // up to 700
 
